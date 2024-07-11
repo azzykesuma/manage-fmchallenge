@@ -1,30 +1,60 @@
-import logo from '/logo.svg'
-import menu from '../assets/images/icon-hamburger.svg'
-import close from '../assets/images/icon-close.svg'
-import { useState } from 'react'
-import { AnimatePresence } from 'framer-motion'
-import MobileNav from './MobileNav'
+import { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import logo from "/logo.svg";
+import menuIcon from "../assets/images/icon-hamburger.svg";
+import closeIcon from "../assets/images/icon-close.svg";
+import MobileNav from "./MobileNav";
+import useIsMobile from "../hooks/useIsMobile";
+import Button from "./ui/Button";
+import DesktopNavs from "./ui/DesktopNavs";
 
 const Header = () => {
-  const [open, setOpen] = useState(false)
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const { isMobile } = useIsMobile();
 
-  const handleMenuOpen = () => {
-    setOpen(prev => !prev)
-  }
+  const handleMenuToggle = () => {
+    setMenuOpen((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isMenuOpen) {
+        setMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('wheel', handleScroll);
+    window.addEventListener('touchmove', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('touchmove', handleScroll);
+    };
+  }, [isMenuOpen]);
+  
 
   return (
-    <div className='relative z-20'>    
-      <header className='flex justify-between items-center pt-4'>
-        <img src={logo} alt='manage company' />
-        <button onClick={handleMenuOpen} className='relative z-30'>
-          <img src={open ? close : menu} alt="menu-button" />
-        </button>
+    <div className="relative z-20">
+      <header className="flex justify-between items-center ">
+        <img src={logo} alt="Manage Company" />
+        {isMobile ? (
+          <button onClick={handleMenuToggle} className="relative z-30">
+            <img src={isMenuOpen ? closeIcon : menuIcon} alt="Menu Button" />
+          </button>
+        ) : (
+          <>
+            <DesktopNavs />
+            <Button className="bg-bright-red text-white">Get Started</Button>
+          </>
+        )}
       </header>
       <AnimatePresence>
-        {open && <MobileNav handleMenuOpen={handleMenuOpen} />}
+        {isMenuOpen && <MobileNav handleMenuOpen={handleMenuToggle} />}
       </AnimatePresence>
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

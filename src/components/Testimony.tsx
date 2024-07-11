@@ -7,8 +7,10 @@ import pic4 from '../assets/images/avatar-anisha.png'
 import 'swiper/css';
 import 'swiper/css/pagination';
 import Button from './ui/Button';
+import useIsMobile from '../hooks/useIsMobile';
 
 const Testimony = () => {
+    const {isMobile} = useIsMobile()
     const testimonyData = [
         {
             id: 1,
@@ -47,15 +49,15 @@ const Testimony = () => {
         <div className='h-80 mt-16'>
             <Swiper
                 spaceBetween={50}
-                slidesPerView={1}
+                slidesPerView={isMobile ? 1 : 3}
                 loop={true}
-                pagination={pagination}
+                pagination={isMobile? pagination : false}
                 modules={[Pagination]}
                 className='h-full w-full'
             >
                 {testimonyData.map(testimony => (
                     <SwiperSlide key={testimony.id}>
-                        <div className="flex flex-col items-center gap-4 bg-very-pale-red rounded-lg mt-[50px]">
+                        <div className={`flex flex-col items-center gap-4 bg-very-pale-red rounded-lg mt-[50px] ${isMobile ? undefined : 'p-5'}`}>
                             <img src={testimony.image} alt={testimony.name} className="rounded-full w-16 h-16 relative -top-8 z-10" />
                             <h3 className="text-dark-blue font-bold">{testimony.name}</h3>
                             <p className="text-center text-dark-grayish-blue pb-4">{testimony.testimony}</p>

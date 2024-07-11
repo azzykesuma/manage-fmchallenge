@@ -81,11 +81,13 @@ module.exports = {
       backgroundImage: {
         "pattern": "url('/bg-tablet-pattern.svg')",
         "pattern-mobile": "url('/bg-mobile.svg')",
-        "bg-pattern-desktop": "url('/bg-desktop.svg')",
+        "pattern-desktop": "url('/bg-desktop.svg')",
       },
     },
     backgroundPosition: {
       "left-top-50" : "left top 50px",
+      "right-top-50" : "right -100px top -90px",
+      "bottom-left": "bottom  left -700px"
     }
   },
   plugins: [require("tailwindcss-animate")],

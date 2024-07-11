@@ -9,11 +9,11 @@ import Footer from "./components/Footer";
 function App() {
   return (
     <MainLayout>
-      <PatternLayout>
+      <PatternLayout position="top-right">
         <Header />
         <Hero />
       </PatternLayout>
-      <PatternLayout>
+      <PatternLayout position="bottom-left">
         <Features />
         <Testimony />
       </PatternLayout>

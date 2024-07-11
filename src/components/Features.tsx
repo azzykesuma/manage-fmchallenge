@@ -1,4 +1,7 @@
+import useIsMobile from "../hooks/useIsMobile";
+
 const Features = () => {
+  const {isMobile} = useIsMobile()
   const features = [
     {
       title: "Track company-wide progress",
@@ -14,21 +17,21 @@ const Features = () => {
     },
   ];
   return (
-    <section className="mt-8">
-      <div>
-        <h2 className="text-3xl text-dark-blue font-extrabold text-center mb-4">
+    <section className={`mt-8 ${isMobile ? undefined : 'flex justify-between'}`}>
+      <div className={ `mb-8 ${isMobile ? 'text-center' : 'text-left basis-4/12'}`}>
+        <h2 className="text-3xl text-dark-blue font-extrabold  mb-4">
           What's different about Manage?
         </h2>
-        <p className="text-center text-dark-grayish-blue">
+        <p className=" text-dark-grayish-blue">
           Manage provides all the functionality your team needs, without the
           complexity. Our software is tailor-made for modern digital product
           teams.
         </p>
       </div>
-      <div>
+      <div className={`${isMobile ? undefined : 'basis-4/12'}`}>
         {features.map((feature, index) => (
-          <div key={index} className="flex flex-col gap-4 mt-8">
-            <h3 className="text-lg border-red-100 text-dark-blue font-extrabold bg-very-pale-red rounded-3xl w-[calc(100%+2rem)] ">
+          <div key={index} className={`flex flex-col gap-4 mb-8`}>
+            <h3 className={`${isMobile ? ' w-[calc(100%+2rem)] bg-very-pale-red' : 'transform -translate-x-[4.4rem]'}  text-lg border-red-100 text-dark-blue font-extrabold  rounded-3xl`}>
               <span className="bg-bright-red text-white rounded-2xl py-1 px-4 mr-4">0{index + 1}</span>
               {feature.title}
             </h3>

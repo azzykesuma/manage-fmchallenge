@@ -4,8 +4,10 @@ import ytIcon from '../../assets/images/icon-youtube.svg'
 import twIcon from '../../assets/images/icon-twitter.svg'
 import pinIcon from '../../assets/images/icon-pinterest.svg'
 import instIcon from '../../assets/images/icon-instagram.svg'
+import useIsMobile from '../../hooks/useIsMobile'
 
 const SocialMedia = () => {
+  const {isMobile} = useIsMobile()
     const socialIcons = [
         {
             id: 1,
@@ -39,10 +41,10 @@ const SocialMedia = () => {
         },
     ]
   return (
-    <div className='flex gap-2 justify-evenly mt-8 my-10'>
+    <div className={`flex gap-2 ${isMobile ? ' justify-evenly mt-8 my-10' : 'mr-auto'}`}>
     {socialIcons.map((icon) => (
       <a key={icon.id} href={icon.url} target="_blank" rel="noreferrer">
-        <img src={icon.icon} alt={icon.alt} className='w-7' />
+        <img src={icon.icon} alt={icon.alt} className='w-7 fill-black' />
       </a>
     ))}
   </div>

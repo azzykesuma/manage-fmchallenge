@@ -1,88 +1,142 @@
-import Button from './ui/Button'
-import {AnimatePresence, motion, useAnimate} from 'framer-motion'
-import logoCompany from '/logo.svg'
-import { useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
-import SocialMedia from './ui/SocialMedia'
-import SuccessModal from './SuccessModal'
+import Button from "./ui/Button";
+import { AnimatePresence, motion, useAnimate } from "framer-motion";
+import logoCompany from "/logo.svg";
+import { useState } from "react";
+import SocialMedia from "./ui/SocialMedia";
+import useIsMobile from "../hooks/useIsMobile";
 
 const Footer = () => {
-    const [subscribe, setSubscribe] = useState('')
-    const [open, setOpen] = useState(false)
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
-    const [errorState, setErrorState] = useState(false)
-    const [scope, animate] = useAnimate()
+  const [subscribe, setSubscribe] = useState("");
+  const [success, setSuccess] = useState(false);
+  const { isMobile } = useIsMobile();
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  const [errorState, setErrorState] = useState(false);
+  const [scope, animate] = useAnimate();
 
-    const handleSubscribe = (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!emailRegex.test(subscribe) || subscribe === '') {
-            setErrorState(true)
-            animate(scope.current, {
-                x: [0, 10, -10, 10, -10, 10, -10, 0],
-                transition: { duration: 0.1}
-            })
-        } else {
-            setErrorState(false)
-            setOpen(true)
-        }
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!emailRegex.test(subscribe) || subscribe === "") {
+      setErrorState(true);
+      if(scope.current) {
+        animate(scope.current, {
+          x: [0, 10, -10, 10, -10, 10, -10, 0],
+          transition: { duration: 0.1 },
+        });
+      }
+    } else {
+      setErrorState(false);
+      setSuccess(true);
     }
-    useEffect(() => {
-        console.log('open', open)
-    }, [open])
+  };
+  
   return (
-    <footer className="bg-very-dark-blue p-4">
-      <form className='flex gap-2 justify-center mt-6'>
-        <input
-          value={subscribe}
-          onChange={(e) => setSubscribe(e.target.value)}
-          type="email"
-          placeholder="Updates in your inbox…"
+    <footer
+      className={`bg-very-dark-blue ${
+        isMobile ? "p-4" : "px-28 py-10 flex items-center justify-between"
+      }`}
+    >
+      <form
+        className={`flex flex-col  mt-6 ${
+          isMobile
+            ? "gap-2 justify-center"
+            : "order-last h-32 justify-between"
+        }`}
+      >
+        <div className="flex gap-2">
+          <input
+            value={subscribe}
+            onChange={(e) => setSubscribe(e.target.value)}
+            type="email"
+            placeholder="Updates in your inbox…"
             className="rounded-3xl p-2 pl-4 text-dark-grayish-blue "
-        />
-        <Button className="bg-bright-red text-white" onClick={handleSubscribe}>
-          Go
-        </Button>
-      </form>
-      <AnimatePresence>
-        {errorState && (
-          <motion.p
-            initial={{ opacity: 0, x: -30}}
-            animate={{ opacity: 1, x: 0}}
-            exit={{ opacity: 0, x: -30}}
-            ref={scope}
-            className="text-red-500 mt-2 ml-4"
+          />
+          <Button
+            className="bg-bright-red text-white"
+            onClick={handleSubscribe}
           >
-            {subscribe ? "Check your email format" : "email is required"}
-          </motion.p>
+            Go
+          </Button>
+        </div>
+        <AnimatePresence>
+          {errorState && (
+            <motion.p
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              ref={scope}
+              className="text-red-500 mt-2 ml-4 italic"
+            >
+              {subscribe ? "Please insert a valid email" : "email is required"}
+            </motion.p>
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {success && (
+            <motion.p
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              ref={scope}
+              className="text-green-600 mt-2 ml-4"
+            >
+              Thank you for subscribing!
+            </motion.p>
+          )}
+        </AnimatePresence>
+        {!isMobile && (
+          <p className="text-center text-dark-grayish-blue">
+            Copyright 2020. ALl Rights Reserved
+          </p>
         )}
-      </AnimatePresence>
-      <motion.div layout className='flex gap-2 justify-evenly my-6'>
+      </form>
+      <motion.div
+        layout
+        className={`flex gap-2 my-6 ${
+          isMobile ? "justify-evenly" : "justify-between w-1/3"
+        }`}
+      >
         <nav>
-          <ul className='flex flex-col gap-2 text-white'>
-            <li>Home</li>
-            <li>Pricing</li>
-            <li>Products</li>
-            <li>About Us</li>
+          <ul className="flex flex-col gap-2 text-white">
+            <li className="hover:text-bright-red">
+              <a href="#">Home</a>
+            </li>
+            <li className="hover:text-bright-red">
+              <a href="#">Pricing</a>
+            </li>
+            <li className="hover:text-bright-red">
+              <a href="#">Products</a>
+            </li>
+            <li className="hover:text-bright-red">
+              <a href="#">About Us</a>
+            </li>
           </ul>
         </nav>
         <nav>
-          <ul className='flex flex-col gap-2 text-white'>
-            <li>Careers</li>
-            <li>Commumity</li>
-            <li>Privacy Policy</li>
+          <ul className="flex flex-col gap-2 text-white">
+            <li className="hover:text-bright-red">
+              <a href="#">Careers</a>
+            </li>
+            <li className="hover:text-bright-red">
+              <a href="#">Community</a>
+            </li>
+            <li className="hover:text-bright-red">
+              <a href="#">Privacy Policy</a>
+            </li>
           </ul>
         </nav>
       </motion.div>
-      <SocialMedia />
-      <img src={logoCompany} className='mx-auto' alt='manage company'/>
-        {open && (
-            createPortal(
-                <SuccessModal close={() => setOpen(false)}/>,
-                document.getElementById('modal') as HTMLElement
-            )
-        )}
+      <div
+        className={`${
+          isMobile
+            ? undefined
+            : "flex flex-col justify-between items-stretch order-first h-32"
+        }`}
+      >
+        <SocialMedia />
+        <img src={logoCompany} className="mx-auto" alt="manage company" />
+      </div>
     </footer>
   );
-}
+};
 
-export default Footer
+export default Footer;
